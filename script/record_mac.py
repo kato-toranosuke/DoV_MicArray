@@ -14,7 +14,6 @@ CHUNK = 1024
 RECORD_SECONDS = 3
 
 OUTPUT_PATH = "../out/"
-# WAVE_OUTPUT_FILENAME = f"output_{RESPEAKER_CHANNELS}.wav"
 
 p = pyaudio.PyAudio()
 
