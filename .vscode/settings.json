@@ -1,0 +1,18 @@
+{
+    "files.eol": "\n",
+    "python.formatting.provider": "autopep8", // formatter, ちなみにlinterはコーディング規約のチェックと指摘を行うツール。formatterは自動整形も含む。PEP8に準拠するため、
+    "python.formatting.autopep8Args": [
+        "--indent-size=4", // indentは4space分の大きさ
+        "--ignore=E302, E402, E266, E121" // E402: import文が文書の先頭にないのを修正。
+    ],
+    "editor.tabSize": 4, // tabは4space分の大きさ
+    "editor.insertSpaces": false, // tabが入力された時にspaceに置き換える
+    "editor.detectIndentation": false, // ファイルを開いたときに、ファイルの内容に応じてtabSizeとinsertSpacesを自動的に検出するかどうかを制御します。こっちが優先される。
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "editor.rulers": [80], // 80桁の位置に線を引く
+    // "editor.wordWrap": "wordWrapColumn",
+    // "editor.wordWrapColumn": 80,
+    // "editor.wrappingIndent": "deepIndent"
+}
