@@ -6,7 +6,8 @@ import wave
 import numpy as np
 
 RESPEAKER_RATE = 48000
-RESPEAKER_CHANNELS = 6 # change base on firmwares, default_firmware.bin as 1 or 6_firmware.bin as 6
+# change base on firmwares, default_firmware.bin as 1 or 6_firmware.bin as 6
+RESPEAKER_CHANNELS = 6
 RESPEAKER_WIDTH = 2
 # run getDeviceInfo.py to get index
 RESPEAKER_INDEX = 0  # refer to input device id
@@ -18,11 +19,11 @@ OUTPUT_PATH = "../out/"
 p = pyaudio.PyAudio()
 
 stream = p.open(
-            rate=RESPEAKER_RATE,
-            format=p.get_format_from_width(RESPEAKER_WIDTH),
-            channels=RESPEAKER_CHANNELS,
-            input=True,
-            input_device_index=RESPEAKER_INDEX,)
+    rate=RESPEAKER_RATE,
+    format=p.get_format_from_width(RESPEAKER_WIDTH),
+    channels=RESPEAKER_CHANNELS,
+    input=True,
+    input_device_index=RESPEAKER_INDEX,)
 
 print("* recording")
 
@@ -50,7 +51,8 @@ for i in range(RESPEAKER_CHANNELS):
     wf = wave.open(WAVE_OUTPUT_FILEPATH, 'wb')
     # wf.setnchannels(RESPEAKER_CHANNELS)
     wf.setnchannels(1)
-    wf.setsampwidth(p.get_sample_size(p.get_format_from_width(RESPEAKER_WIDTH)))
+    wf.setsampwidth(p.get_sample_size(
+        p.get_format_from_width(RESPEAKER_WIDTH)))
     wf.setframerate(RESPEAKER_RATE)
     wf.writeframes(b''.join(frames[i]))
     wf.close()
