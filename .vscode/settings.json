@@ -6,7 +6,7 @@
         "--ignore=E302, E402, E266, E121" // E402: import文が文書の先頭にないのを修正。
     ],
     "editor.tabSize": 4, // tabは4space分の大きさ
-    "editor.insertSpaces": false, // tabが入力された時にspaceに置き換える
+    "editor.insertSpaces": true, // tabが入力された時にspaceに置き換える
     "editor.detectIndentation": false, // ファイルを開いたときに、ファイルの内容に応じてtabSizeとinsertSpacesを自動的に検出するかどうかを制御します。こっちが優先される。
     "editor.formatOnSave": true,
     "editor.formatOnPaste": false,
