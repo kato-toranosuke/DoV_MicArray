@@ -3,13 +3,12 @@
 
 import pyaudio
 import wave
-import time
-import usb.core
-import usb.util
 from typing import List
 import datetime
 import os
 import re
+import sys
+from load_constants import Rec_Consts
 
 
 def getDirname(output_path) -> str:
@@ -29,7 +28,7 @@ def getDirname(output_path) -> str:
     return dir_name
 
 
-def outputWaveFiles(nch: int, output_path: str, frames: List):
+def outputWaveFiles(consts: Rec_Consts, frames: List, p: pyaudio.PyAudio):
     '''
     同一ディレクトリにチャンネル毎のwavファイルを出力する。
 
@@ -40,20 +39,20 @@ def outputWaveFiles(nch: int, output_path: str, frames: List):
     output_path: str
 
     '''
-    dir_name = getDirname(output_path)
-    for i in range(nch):
+    # 音声ファイルを格納するディレクトリの名前を取得
+    dir_name = getDirname(consts.OUTPUT_PATH)
+    # ディレクトリを作成
+    output_dir_path = consts.OUTPUT_PATH + dir_name
+    os.mkdir(output_dir_path)
+
+    for i in range(consts.RESPEAKER_CHANNELS):
         filename = f"ch{i}.wav"
-        wave_output_filepath = output_path + wave_output_filename
-        wf = wave.open(wave_output_filepath, 'wb')
-        wf.setnchannels(1)
-        wf.setsampwidth(p.get_sample_size(
-            p.get_format_from_width(RESPEAKER_WIDTH)))
-        wf.setframerate(RESPEAKER_RATE)
-        wf.writeframes(b''.join(frames[i]))
-        wf.close()
+        output_file_path = output_dir_path + '/' + filename
+        outputWaveFile(
+            output_file_path, frames[i], p, consts.RESPEAKER_WIDTH, consts.RESPEAKER_RATE)
 
 
-def outputWaveFile(file_path: str, frame: List, pa: pyaudio.PyAudio, width: int, fs: int) -> None:
+def outputWaveFile(file_path: str, frame: List, p: pyaudio.PyAudio, width: int, fs: int) -> None:
     '''
     音声データをwavファイルを出力する。
 
@@ -69,12 +68,12 @@ def outputWaveFile(file_path: str, frame: List, pa: pyaudio.PyAudio, width: int,
     try:
         wf = wave.open(file_path, 'wb')
         wf.setnchannels(1)
-        wf.setsampwidth(pa.get_sample_size(pa.get_format_from_width(width)))
+        wf.setsampwidth(p.get_sample_size(p.get_format_from_width(width)))
         wf.setframerate(fs)
         wf.writeframes(b''.join(frame))
     except:
-        print(f'Failed to write audio file.: {file_path}')
+        print(f'Failed to write audio file.: {file_path}\n', file=sys.stderr)
     else:
-        print(f'Success to write audio file.: {file_path}')
+        print(f'Success to write audio file.: {file_path}\n')
     finally:
         wf.close()

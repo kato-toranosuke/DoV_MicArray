@@ -2,86 +2,36 @@
 # coding: utf-8
 
 import pyaudio
-import wave
 import numpy as np
 import time
-from mylib.usb_4_mic_array.tuning import Tuning
 import usb.core
 import usb.util
+import sys
 from typing import List
-
-RESPEAKER_RATE = 48000
-# change base on firmwares, default_firmware.bin as 1 or 6_firmware.bin as 6
-RESPEAKER_CHANNELS = 6
-RESPEAKER_WIDTH = 2
-# run getDeviceInfo.py to get index
-RESPEAKER_INDEX = 0  # refer to input device id
-CHUNK = 1024
-RECORD_SECONDS = 3
-OUTPUT_PATH = "../out/"
-
-
-def outputWaveFiles(nch: int, output_path: str, frames: List):
-    '''
-    チャンネル毎にwavファイルを出力する。
-
-    Parameters
-    ----------
-    nch: int, default 6
-                    チャンネル数
-    '''
-    for i in range(nch):
-        wave_output_filename = f"output_{i}.wav"
-        wave_output_filepath = output_path + wave_output_filename
-        wf = wave.open(wave_output_filepath, 'wb')
-        wf.setnchannels(1)
-        wf.setsampwidth(p.get_sample_size(
-            p.get_format_from_width(RESPEAKER_WIDTH)))
-        wf.setframerate(RESPEAKER_RATE)
-        wf.writeframes(b''.join(frames[i]))
-        wf.close()
-
-
-def outputWaveFile(file_path: str, frame: List, pyaudio: pyaudio.PyAudio):
-    '''
-    音声データをwavファイルを出力する。
-
-    Parameters
-    ----------
-    file_path: str
-            ファイルパス
-    frame: array-like
-            音声データが格納された配列
-    pyaudio: pyaudio.PyAudio
-            pyaudio
-    '''
-    wf = wave.open(file_path, 'wb')
-    wf.setnchannels(1)
-    wf.setsampwidth(pyaudio.get_sample_size(
-        pyaudio.get_format_from_width(RESPEAKER_WIDTH)))
-    wf.setframerate(RESPEAKER_RATE)
-    wf.writeframes(b''.join(frame))
-    wf.close()
-
+from mylib.usb_4_mic_array.tuning import Tuning
+from mylib.load_constants import Rec_Consts
+from mylib import record_audio
 
 def main():
     #############
     ### Setup ###
     #############
     p = pyaudio.PyAudio()
+    consts = Rec_Consts()
     # streamのopen
     stream = p.open(
-        rate=RESPEAKER_RATE,
-        format=p.get_format_from_width(RESPEAKER_WIDTH),
-        channels=RESPEAKER_CHANNELS,
+        format=p.get_format_from_width(consts.RESPEAKER_WIDTH),
+        channels=consts.RESPEAKER_CHANNELS,
+        rate=consts.RESPEAKER_RATE,
         input=True,
-        input_device_index=RESPEAKER_INDEX,)
+        output=False,  # 追加
+        input_device_index=consts.RESPEAKER_INDEX,)
     # USB-Device
     dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
 
-    ##################
-    ### Processing ###
-    ##################
+    #################
+    ### Recording ###
+    #################
     if dev:
         Mic_tuning = Tuning(dev)
         try:
@@ -91,22 +41,27 @@ def main():
                 if Mic_tuning.is_voice():
                     print("* recording")
                     # 音声データを格納する二次元配列
-                    frames = [[] for _ in range(RESPEAKER_CHANNELS)]
-                    for i in range(0, int(RESPEAKER_RATE / CHUNK * RECORD_SECONDS)):
-                        data = stream.read(CHUNK)
+                    frames = [[] for _ in range(consts.RESPEAKER_CHANNELS)]
+                    for i in range(0, int(consts.RESPEAKER_RATE / consts.CHUNK * consts.RECORD_SECONDS)):
+                        data = stream.read(consts.CHUNK)
                         # channelごとの音声データの取得
-                        for j in range(RESPEAKER_CHANNELS):
+                        for j in range(consts.RESPEAKER_CHANNELS):
                             ch_data = np.frombuffer(data, dtype=np.int16)[
-                                j::RESPEAKER_CHANNELS]
+                                j::consts.RESPEAKER_CHANNELS]
                             frames[j].append(ch_data.tobytes())
                     print("* done recording")
+
+                    # wavファイルに出力
+                    record_audio.outputWaveFiles(consts, frames, p)
                 time.sleep(0.1)
         except KeyboardInterrupt:
             print("\nStop Recording.")
         finally:
             stream.stop_stream()
             stream.close()
-            p.terminate()
+            p.terminate()  # PyAudioのインスタンスを破棄する
+    else:
+        print("Device not found.", file=sys.stderr)
 
 # print("* recording")
 
