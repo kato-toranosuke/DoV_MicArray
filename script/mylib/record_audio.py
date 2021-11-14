@@ -8,7 +8,7 @@ import datetime
 import os
 import re
 import sys
-from load_constants import Rec_Consts
+from .load_constants import Rec_Consts
 
 
 def getDirname(output_path) -> str:
