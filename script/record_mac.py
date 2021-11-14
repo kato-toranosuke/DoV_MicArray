@@ -10,7 +10,7 @@ RESPEAKER_RATE = 48000
 RESPEAKER_CHANNELS = 6
 RESPEAKER_WIDTH = 2
 # run getDeviceInfo.py to get index
-RESPEAKER_INDEX = 0  # refer to input device id
+RESPEAKER_INDEX = 2  # refer to input device id
 CHUNK = 1024
 RECORD_SECONDS = 3
 
@@ -23,6 +23,7 @@ stream = p.open(
     format=p.get_format_from_width(RESPEAKER_WIDTH),
     channels=RESPEAKER_CHANNELS,
     input=True,
+    output=False,
     input_device_index=RESPEAKER_INDEX,)
 
 print("* recording")

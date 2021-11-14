@@ -25,7 +25,7 @@ def main():
         rate=consts.RESPEAKER_RATE,
         input=True,
         output=False,  # 追加
-        input_device_index=consts.RESPEAKER_INDEX,)
+        input_device_index=consts.RESPEAKER_INDEX)
     # USB-Device
     dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
 
