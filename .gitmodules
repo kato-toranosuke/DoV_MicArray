@@ -1,0 +1,3 @@
+[submodule "script/mylib/usb_4_mic_array"]
+	path = script/mylib/usb_4_mic_array
+	url = git@github.com:kato-toranosuke/usb_4_mic_array.git
