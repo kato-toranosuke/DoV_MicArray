@@ -72,8 +72,8 @@ def outputWaveFile(file_path: str, frame: List, p: pyaudio.PyAudio, width: int, 
         wf.setframerate(fs)
         wf.writeframes(b''.join(frame))
     except:
-        print(f'Failed to write audio file.: {file_path}\n', file=sys.stderr)
+        print(f'Failed to write audio file.: {file_path}', file=sys.stderr)
     else:
-        print(f'Success to write audio file.: {file_path}\n')
+        print(f'Success to write audio file.: {file_path}')
     finally:
         wf.close()
