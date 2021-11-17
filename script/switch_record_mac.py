@@ -7,13 +7,10 @@ import time
 import usb.core
 import usb.util
 import sys
-from typing import List
 import keyboard
 from mylib.usb_4_mic_array.tuning import Tuning
 from mylib.load_constants import Rec_Consts
 from mylib import record_audio
-# from pynput.keyboard import Key, Listener
-# from pynput.keyboard import Listener
 import argparse
 
 def start_with_key(consts: Rec_Consts) -> None:
