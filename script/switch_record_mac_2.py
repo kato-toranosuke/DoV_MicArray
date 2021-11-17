@@ -12,9 +12,7 @@ import keyboard
 from mylib.usb_4_mic_array.tuning import Tuning
 from mylib.load_constants import Rec_Consts
 from mylib import record_audio
-# from pynput.keyboard import Key, Listener
-from pynput.keyboard import Listener
-import argparse
+from pynput.keyboard import Key, Listener
 
 def start_with_key(consts: Rec_Consts) -> None:
     '''
@@ -48,7 +46,6 @@ def start_with_key(consts: Rec_Consts) -> None:
                     print("\n### recording ###")
                     # 音声データを格納する二次元配列
                     frames = [[] for _ in range(consts.RESPEAKER_CHANNELS)]
-                    # 一定時間の録音
                     for _ in range(0, int(consts.RESPEAKER_RATE / consts.CHUNK * consts.RECORD_SECONDS)):
                         data = stream.read(consts.CHUNK)
                         # channelごとの音声データの取得
@@ -137,70 +134,8 @@ def start_end_with_key(consts: Rec_Consts, block_sec: float = 0.1) -> None:
     else:
         print("Device not found.", file=sys.stderr)
 
-class Recording():
-    def __init__(self, consts: Rec_Consts) -> None:
-        self.consts = consts
-        self.p = pyaudio.PyAudio()
-        # self.frames = [[] for _ in range(self.consts.RESPEAKER_CHANNELS)]
-        self.frame_len = int(self.consts.RESPEAKER_RATE /
-                             self.consts.CHUNK * self.consts.RECORD_SECONDS)
-        # USB-Device
-        self.dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
-        # USB-Deviceが見つからなかった場合
-        if self.dev is None:
-            print("Device not found.", file=sys.stderr)
-            return
-
-    def startRecording(self):
-        print("\n### start recording ###")
-        self.frames = [[] for _ in range(self.consts.RESPEAKER_CHANNELS)]
-        self.stream = self.p.open(
-            format=self.p.get_format_from_width(self.consts.RESPEAKER_WIDTH),
-            channels=self.consts.RESPEAKER_CHANNELS,
-            rate=self.consts.RESPEAKER_RATE,
-            input=True,
-            output=False,
-            input_device_index=self.consts.RESPEAKER_INDEX,
-            frames_per_buffer=self.consts.CHUNK)
-        # 終了コマンドが押されるまでframeを読み込み続ける
-        while self.stream.is_active():
-            self.readFrame()
-
-    def readFrame(self):
-        '''
-        1chunk分の全チャンネルのデータを読み込み、frames配列に追加する。
-        '''
-        data = self.stream.read(self.consts.CHUNK)
-        # channelごとの音声データの取得
-        for ch in range(self.consts.RESPEAKER_CHANNELS):
-            ch_data = np.frombuffer(data, dtype=np.int16)[
-                ch::self.consts.RESPEAKER_CHANNELS]
-            self.frames[ch].append(ch_data.tobytes())
-
-    def endRecording(self):
-        self.stream.stop_stream()
-        self.stream.close()
-        # wavファイルに出力
-        record_audio.outputWaveFiles(self.consts, self.frames, self.p)
-        print("### stop recording ###")
-
-    def on_press(self, key):
-        self.startRecording()
-
-    def on_release(self, key):
-        self.endRecording()
-
-    def main(self):
-        with Listener(on_press=self.on_press, on_release=self.on_release) as listener:
-            listener.join()
-
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        participant = sys.argv[1]
-
     consts = Rec_Consts(index=0)
     # start_with_key(consts)
-    # start_end_with_key(consts)
-    recording = Recording(consts=consts)
-    recording.main()
+    start_end_with_key(consts)
