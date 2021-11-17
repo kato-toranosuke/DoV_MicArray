@@ -13,7 +13,7 @@ from mylib.usb_4_mic_array.tuning import Tuning
 from mylib.load_constants import Rec_Consts
 from mylib import record_audio
 # from pynput.keyboard import Key, Listener
-from pynput.keyboard import Listener
+# from pynput.keyboard import Listener
 import argparse
 
 def start_with_key(consts: Rec_Consts) -> None:
@@ -190,17 +190,53 @@ class Recording():
     def on_release(self, key):
         self.endRecording()
 
-    def main(self):
-        with Listener(on_press=self.on_press, on_release=self.on_release) as listener:
-            listener.join()
+    # def main(self):
+    #     with Listener(on_press=self.on_press, on_release=self.on_release) as listener:
+    #         listener.join()
 
+
+# # 引数の設定
+# parser = argparse.ArgumentParser()
+# parser.add_argument('participant', default='s11', nargs='?')
+# parser.add_argument('--utterance')
+# parser.add_argument('session', default='trial1', nargs='?')
+# parser.add_argument('room', default='upstairs',
+#                     choices=['upstairs', 'downstairs'], nargs='?')
+# parser.add_argument('device_placement', default='wall',
+#                     choices=['wall', 'nowall'], nargs='?')
+# # choices コンテナーに含まれているかどうかのチェックは、type による型変換が実行された後であることに注意してください。
+# # このため、choices に格納するオブジェクトの型は指定された type にマッチしている必要があります
+# parser.add_argument('--distance', choices=[1, 3, 5], type=int)
+# parser.add_argument('--polar_angle', choices=[0, 45, 90], type=int)
+# parser.add_argument(
+#     '--dov_angle', choices=[0, 45, 90, 135, 180, 225, 270, 315], type=int)
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        participant = sys.argv[1]
+    # 引数の設定
+    parser = argparse.ArgumentParser()
+    parser.add_argument('participant', default='s11', nargs='?')
+    parser.add_argument('--utterance')
+    parser.add_argument('session', default='trial1', nargs='?')
+    parser.add_argument('room', default='upstairs',
+                        choices=['upstairs', 'downstairs'], nargs='?')
+    parser.add_argument('device_placement', default='wall',
+                        choices=['wall', 'nowall'], nargs='?')
+    # choices コンテナーに含まれているかどうかのチェックは、type による型変換が実行された後であることに注意してください。
+    # このため、choices に格納するオブジェクトの型は指定された type にマッチしている必要があります
+    parser.add_argument('--distance', choices=[1, 3, 5], type=int)
+    parser.add_argument('--polar_angle', choices=[0, 45, 90], type=int)
+    parser.add_argument(
+        '--dov_angle', choices=[0, 45, 90, 135, 180, 225, 270, 315], type=int)
 
-    consts = Rec_Consts(index=0)
-    # start_with_key(consts)
-    # start_end_with_key(consts)
-    recording = Recording(consts=consts)
-    recording.main()
+    # 引数がある場合
+    if len(sys.argv) > 1:
+        args = parser.parse_args()
+        output_path = record_audio.getOutputPath(args.participant, args.utterance, args.session,
+                                                 args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
+        print(output_path)
+    else:
+        consts = Rec_Consts(index=0)
+        # start_with_key(consts)
+        # start_end_with_key(consts)
+        recording = Recording(consts=consts)
+        recording.main()

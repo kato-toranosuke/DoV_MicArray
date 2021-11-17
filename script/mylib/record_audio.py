@@ -27,6 +27,38 @@ def getDirname(output_path) -> str:
     dir_name = d_today + '_no' + str(no)
     return dir_name
 
+def getOutputPath(participant, utterance, session, room, device_placement, distance, polar_angle, dov_angle):
+    # 第０階層（録音日）
+    zero_dir_name = datetime.date.today().isoformat()
+    # 第１階層
+    first_dir_name = participant
+    # 第２階層
+    second_dir_name = participant + '_' + room + \
+        '_' + device_placement + '_' + session
+    # 第３階層
+    # get distance_id
+    if distance == 1:
+        distance_id = 'A'
+    elif distance == 3:
+        distance_id = 'B'
+    elif distance == 5:
+        distance_id = 'C'
+
+    # get polar_angle_id
+    if polar_angle == 0:
+        polar_angle_id = 0
+    elif polar_angle == 45:
+        polar_angle_id = 1
+    elif polar_angle == 90:
+        polar_angle_id = 2
+
+    polar_position_id = distance_id + str(polar_angle_id)
+    third_dir_name = polar_position_id + '_' + \
+        str(distance) + '_' + str(polar_angle)
+
+    output_path = zero_dir_name + '/' + first_dir_name + \
+        '/' + second_dir_name + '/' + third_dir_name
+    return output_path
 
 def outputWaveFiles(consts: Rec_Consts, frames: List, p: pyaudio.PyAudio):
     '''
