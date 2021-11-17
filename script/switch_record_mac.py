@@ -195,28 +195,12 @@ class Recording():
     #         listener.join()
 
 
-# # 引数の設定
-# parser = argparse.ArgumentParser()
-# parser.add_argument('participant', default='s11', nargs='?')
-# parser.add_argument('--utterance')
-# parser.add_argument('session', default='trial1', nargs='?')
-# parser.add_argument('room', default='upstairs',
-#                     choices=['upstairs', 'downstairs'], nargs='?')
-# parser.add_argument('device_placement', default='wall',
-#                     choices=['wall', 'nowall'], nargs='?')
-# # choices コンテナーに含まれているかどうかのチェックは、type による型変換が実行された後であることに注意してください。
-# # このため、choices に格納するオブジェクトの型は指定された type にマッチしている必要があります
-# parser.add_argument('--distance', choices=[1, 3, 5], type=int)
-# parser.add_argument('--polar_angle', choices=[0, 45, 90], type=int)
-# parser.add_argument(
-#     '--dov_angle', choices=[0, 45, 90, 135, 180, 225, 270, 315], type=int)
-
 if __name__ == '__main__':
     # 引数の設定
     parser = argparse.ArgumentParser()
     parser.add_argument('participant', default='s11', nargs='?')
     parser.add_argument('--utterance')
-    parser.add_argument('session', default='trial1', nargs='?')
+    parser.add_argument('session', default=None, nargs='?')
     parser.add_argument('room', default='upstairs',
                         choices=['upstairs', 'downstairs'], nargs='?')
     parser.add_argument('device_placement', default='wall',
@@ -228,14 +212,14 @@ if __name__ == '__main__':
     parser.add_argument(
         '--dov_angle', choices=[0, 45, 90, 135, 180, 225, 270, 315], type=int)
 
+    # 定数の設定
+    consts = Rec_Consts(index=0)
     # 引数がある場合
     if len(sys.argv) > 1:
         args = parser.parse_args()
-        output_path = record_audio.getOutputPath(args.participant, args.utterance, args.session,
-                                                 args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
-        print(output_path)
+        output_file_path = record_audio.setupOutputEnv(consts, args.participant, args.utterance, args.session,
+                                                       args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
     else:
-        consts = Rec_Consts(index=0)
         # start_with_key(consts)
         # start_end_with_key(consts)
         recording = Recording(consts=consts)

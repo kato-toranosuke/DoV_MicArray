@@ -27,7 +27,7 @@ def getDirname(output_path) -> str:
     dir_name = d_today + '_no' + str(no)
     return dir_name
 
-def getOutputPath(participant, utterance, session, room, device_placement, distance, polar_angle, dov_angle):
+def getOutputDirPath(participant, utterance, session, room, device_placement, distance, polar_angle, dov_angle):
     # 第０階層（録音日）
     zero_dir_name = datetime.date.today().isoformat()
     # 第１階層
@@ -59,6 +59,42 @@ def getOutputPath(participant, utterance, session, room, device_placement, dista
     output_path = zero_dir_name + '/' + first_dir_name + \
         '/' + second_dir_name + '/' + third_dir_name
     return output_path
+
+def setupOutputEnv(consts: Rec_Consts, participant, utterance, session, room, device_placement, distance, polar_angle, dov_angle) -> str:
+    # sessionの設定
+    if session == None:
+        # 探索対象のパスの設定
+        zero_dir_name = datetime.date.today().isoformat()
+        first_dir_name = participant
+        search_dir_path = consts.OUTPUT_PATH + '/' + \
+            zero_dir_name + '/' + first_dir_name
+        # パスが存在しないと、listdirがエラーになるので
+        os.makedirs(search_dir_path, exist_ok=True)
+        dirs_list = os.listdir(search_dir_path)
+        # trialの設定
+        second_dir_name = participant + '_' + room + '_' + device_placement + '_'
+        regex = re.compile(re.escape(second_dir_name) + r'.*')
+        no = 1
+        for dir_name in dirs_list:
+            is_match = regex.match(dir_name)
+            if is_match != None:
+                no += 1
+        # session変数
+        session = 'trial' + str(no)
+
+    # ouput_pathの取得
+    output_dir_path = consts.OUTPUT_PATH + '/' + getOutputDirPath(participant, utterance, session,
+                                                                  room, device_placement, distance, polar_angle, dov_angle)
+    # output_dirの生成
+    # exist_ok = Trueで既存ディレクトリを指定してもエラーにしない
+    os.makedirs(output_dir_path, exist_ok=True)
+
+    # output_file_nameの生成
+    output_file_name = utterance + '_' + str(dov_angle) + '_'
+
+    output_file_path = output_dir_path + '/' + output_file_name
+
+    return output_file_path
 
 def outputWaveFiles(consts: Rec_Consts, frames: List, p: pyaudio.PyAudio):
     '''
