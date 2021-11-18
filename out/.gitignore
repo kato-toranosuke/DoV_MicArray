@@ -1,0 +1,3 @@
+recording/*
+# ラズパイからの音声のみ残す
+!recording/raspi/
