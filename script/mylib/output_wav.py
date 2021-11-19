@@ -8,7 +8,7 @@ import datetime
 import os
 import re
 import sys
-from .load_constants import Rec_Consts
+from load_constants import Rec_Consts
 
 
 def getDirname(output_path) -> str:
@@ -96,7 +96,7 @@ def setupOutputEnv(consts: Rec_Consts, participant, utterance, session, room, de
 
     return output_file_path
 
-def outputWaveFiles(consts: Rec_Consts, frames: List, p: pyaudio.PyAudio):
+def outputWaveFiles(consts: Rec_Consts, frames: List, p: pyaudio.PyAudio, part_of_output_file_path: str):
     '''
     同一ディレクトリにチャンネル毎のwavファイルを出力する。
 
@@ -107,15 +107,15 @@ def outputWaveFiles(consts: Rec_Consts, frames: List, p: pyaudio.PyAudio):
     output_path: str
 
     '''
-    # 音声ファイルを格納するディレクトリの名前を取得
-    dir_name = getDirname(consts.OUTPUT_PATH)
-    # ディレクトリを作成
-    output_dir_path = consts.OUTPUT_PATH + dir_name
-    os.mkdir(output_dir_path)
+    # # 音声ファイルを格納するディレクトリの名前を取得
+    # dir_name = getDirname(consts.OUTPUT_PATH)
+    # # ディレクトリを作成
+    # output_dir_path = consts.OUTPUT_PATH + dir_name
+    # os.mkdir(output_dir_path)
 
     for i in range(consts.RESPEAKER_CHANNELS):
-        filename = f"ch{i}.wav"
-        output_file_path = output_dir_path + '/' + filename
+        # filename = f"ch{i}.wav"
+        output_file_path = part_of_output_file_path + str(i) + '.wav'
         outputWaveFile(
             output_file_path, frames[i], p, consts.RESPEAKER_WIDTH, consts.RESPEAKER_RATE)
 

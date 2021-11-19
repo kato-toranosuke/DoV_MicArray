@@ -10,7 +10,7 @@ import sys
 from typing import List
 from mylib.usb_4_mic_array.tuning import Tuning
 from mylib.load_constants import Rec_Consts
-from mylib import record_audio
+from mylib import output_wav
 
 def main():
     #############
@@ -54,7 +54,7 @@ def main():
                     stream.close()
 
                     # wavファイルに出力
-                    record_audio.outputWaveFiles(consts, frames, p)
+                    output_wav.outputWaveFiles(consts, frames, p)
                 time.sleep(0.1)
         except KeyboardInterrupt:
             print("\nStop Recording.")

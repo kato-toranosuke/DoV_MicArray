@@ -8,10 +8,11 @@ import usb.core
 import usb.util
 import sys
 import keyboard
+import argparse
 from mylib.usb_4_mic_array.tuning import Tuning
 from mylib.load_constants import Rec_Consts
-from mylib import record_audio
-import argparse
+from mylib import output_wav
+from mylib import rec_audio
 
 def start_with_key(consts: Rec_Consts) -> None:
     '''
@@ -58,7 +59,7 @@ def start_with_key(consts: Rec_Consts) -> None:
                     stream.close()
 
                     # wavファイルに出力
-                    record_audio.outputWaveFiles(consts, frames, p)
+                    output_wav.outputWaveFiles(consts, frames, p)
 
                     time.sleep(0.01)
 
@@ -123,7 +124,7 @@ def start_end_with_key(consts: Rec_Consts, block_sec: float = 0.1) -> None:
                     stream.close()
 
                     # wavファイルに出力
-                    record_audio.outputWaveFiles(consts, frames, p)
+                    output_wav.outputWaveFiles(consts, frames, p)
 
                     time.sleep(0.01)
 
@@ -178,7 +179,7 @@ class Recording():
         self.stream.stop_stream()
         self.stream.close()
         # wavファイルに出力
-        record_audio.outputWaveFiles(self.consts, self.frames, self.p)
+        output_wav.outputWaveFiles(self.consts, self.frames, self.p)
         print("### stop recording ###")
 
     def on_press(self, key):
@@ -210,12 +211,14 @@ if __name__ == '__main__':
         '--dov_angle', choices=[0, 45, 90, 135, 180, 225, 270, 315], type=int)
 
     # 定数の設定
-    consts = Rec_Consts(index=0)
+    consts = Rec_Consts(
+        index=2, output_path="../out/recording/mac", record_sec=1.5)
     # 引数がある場合
     if len(sys.argv) > 1:
         args = parser.parse_args()
-        output_file_path = record_audio.setupOutputEnv(consts, args.participant, args.utterance, args.session,
-                                                       args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
+        output_file_path = output_wav.setupOutputEnv(consts, args.participant, args.utterance, args.session,
+                                                     args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
+        # recording =
     else:
         # start_with_key(consts)
         # start_end_with_key(consts)
