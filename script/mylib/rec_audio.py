@@ -2,10 +2,9 @@
 # coding: utf-8
 
 import pyaudio
-import wave
 import numpy as np
-from .load_constants import Rec_Consts
-from .output_wav import outputWaveFiles
+from mylib.load_constants import Rec_Consts
+from mylib.output_wav import outputWaveFiles
 
 def recording(consts: Rec_Consts, part_of_output_file_path: str = None) -> None:
     '''
