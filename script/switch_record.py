@@ -196,12 +196,12 @@ class Recording():
 if __name__ == '__main__':
     # 引数の設定
     parser = argparse.ArgumentParser()
-    parser.add_argument('participant', default='s11', nargs='?')
+    parser.add_argument('--participant', default='s11', nargs='?')
     parser.add_argument('--utterance')
-    parser.add_argument('session', default=None, nargs='?')
-    parser.add_argument('room', default='upstairs',
+    parser.add_argument('--session', default=None, nargs='?')
+    parser.add_argument('--room', default='upstairs',
                         choices=['upstairs', 'downstairs'], nargs='?')
-    parser.add_argument('device_placement', default='wall',
+    parser.add_argument('--device_placement', default='wall',
                         choices=['wall', 'nowall'], nargs='?')
     # choices コンテナーに含まれているかどうかのチェックは、type による型変換が実行された後であることに注意してください。
     # このため、choices に格納するオブジェクトの型は指定された type にマッチしている必要があります
@@ -218,7 +218,8 @@ if __name__ == '__main__':
         args = parser.parse_args()
         part_of_output_file_path = output_wav.setupOutputEnv(consts, args.participant, args.utterance, args.session,
                                                              args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
-        rec_audio.recording(consts, part_of_output_file_path)
+        print(part_of_output_file_path)
+        # rec_audio.recording(consts, part_of_output_file_path)
     # else:
     #     start_with_key(consts)
     #     start_end_with_key(consts)
