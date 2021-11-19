@@ -212,15 +212,15 @@ if __name__ == '__main__':
 
     # 定数の設定
     consts = Rec_Consts(
-        index=2, output_path="../out/recording/mac", record_sec=1.5)
+        index=0, output_path="../out/recording/mac", record_sec=1.5)
     # 引数がある場合
     if len(sys.argv) > 1:
         args = parser.parse_args()
-        output_file_path = output_wav.setupOutputEnv(consts, args.participant, args.utterance, args.session,
-                                                     args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
-        # recording =
-    else:
-        # start_with_key(consts)
-        # start_end_with_key(consts)
-        recording = Recording(consts=consts)
-        recording.main()
+        part_of_output_file_path = output_wav.setupOutputEnv(consts, args.participant, args.utterance, args.session,
+                                                             args.room, args.device_placement, args.distance, args.polar_angle, args.dov_angle)
+        rec_audio.recording(consts, part_of_output_file_path)
+    # else:
+    #     start_with_key(consts)
+    #     start_end_with_key(consts)
+    #     recording = Recording(consts=consts)
+    #     recording.main()
