@@ -27,7 +27,8 @@ def getDirname(output_path) -> str:
     dir_name = d_today + '_no' + str(no)
     return dir_name
 
-def getOutputDirPath(participant, utterance, session, room, device_placement, distance, polar_angle, dov_angle) -> tuple[str, str, str, str, str]:
+# def getOutputDirPath(participant, utterance, session, room, device_placement, distance, polar_angle, dov_angle) -> tuple[str, str, str, str, str]:
+def getOutputDirPath(participant, utterance, session, room, device_placement, distance, polar_angle, dov_angle):
     # 第０階層（録音日）
     zero_dir_name = datetime.date.today().isoformat()
     # 第１階層
