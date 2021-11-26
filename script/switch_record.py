@@ -211,10 +211,10 @@ if __name__ == '__main__':
         '--dov_angle', choices=[0, 45, 90, 135, 180, 225, 270, 315], type=int)
 
     # 定数の設定
-    # consts = Rec_Consts(
-    #     index=0, output_path="../out/recording/mac", record_sec=1.5, rate=48000)
     consts = Rec_Consts(
-        index=0, output_path="../out/recording/raspi", record_sec=1.5, rate=16000)
+        index=0, output_path="../out/recording/mac", record_sec=1.5, rate=48000)
+    # consts = Rec_Consts(
+    #     index=0, output_path="../out/recording/raspi", record_sec=1.5, rate=16000)
     # 引数がある場合
     if len(sys.argv) > 1:
         args = parser.parse_args()
