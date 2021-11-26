@@ -6,12 +6,13 @@ import wave
 import numpy as np
 
 RESPEAKER_RATE = 48000
-RESPEAKER_RATE = 16000
+# RESPEAKER_RATE = 16000
+# RESPEAKER_RATE = 32000
 # change base on firmwares, default_firmware.bin as 1 or 6_firmware.bin as 6
 RESPEAKER_CHANNELS = 6
 RESPEAKER_WIDTH = 2
 # run getDeviceInfo.py to get index
-RESPEAKER_INDEX = 1  # refer to input device id
+RESPEAKER_INDEX = 0  # refer to input device id
 CHUNK = 1024
 RECORD_SECONDS = 3
 
@@ -20,8 +21,9 @@ OUTPUT_PATH = "../out/recording/raspi/"
 p = pyaudio.PyAudio()
 
 stream = p.open(
+    # format=p.get_format_from_width(RESPEAKER_WIDTH),
+    format=pyaudio.paInt16,
     rate=RESPEAKER_RATE,
-    format=p.get_format_from_width(RESPEAKER_WIDTH),
     channels=RESPEAKER_CHANNELS,
     input=True,
     output=False,

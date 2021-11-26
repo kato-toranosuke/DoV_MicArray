@@ -200,7 +200,7 @@ if __name__ == '__main__':
     parser.add_argument('--utterance')
     parser.add_argument('--session', default=None, nargs='?')
     parser.add_argument('--room', default='upstairs',
-                        choices=['upstairs', 'downstairs'], nargs='?')
+                        choices=['upstairs', 'downstairs', 'onshinlab', 'gym'], nargs='?')
     parser.add_argument('--device_placement', default='wall',
                         choices=['wall', 'nowall'], nargs='?')
     # choices コンテナーに含まれているかどうかのチェックは、type による型変換が実行された後であることに注意してください。
@@ -212,7 +212,7 @@ if __name__ == '__main__':
 
     # 定数の設定
     consts = Rec_Consts(
-        index=0, output_path="../out/recording/mac", record_sec=1.5)
+        index=1, output_path="../out/recording/raspi", record_sec=1.5, rate=16000)
     # 引数がある場合
     if len(sys.argv) > 1:
         args = parser.parse_args()

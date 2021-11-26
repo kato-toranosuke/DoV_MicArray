@@ -58,6 +58,6 @@ def recording(consts: Rec_Consts, part_of_output_file_path: str = None) -> None:
 
 
 if __name__ == "__main__":
-    consts = Rec_Consts(index=2, record_sec=1.5,
-                        output_path="../out/recording/mac")
-    recording(consts, "../../out/recording/mac")
+    consts = Rec_Consts(index=1, record_sec=1.5,
+                        output_path="../out/recording/raspi")
+    recording(consts)
