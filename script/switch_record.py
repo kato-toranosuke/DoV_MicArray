@@ -214,7 +214,7 @@ if __name__ == '__main__':
     # consts = Rec_Consts(
     #     index=0, output_path="../out/recording/mac", record_sec=1.5, rate=48000)
     consts = Rec_Consts(
-        index=0, output_path="../out/recording/raspi", record_sec=1.5, rate=16000)
+        index=0, output_path="../out/recording/raspi", record_sec=2.0, rate=48000, chunk=2048)
     # 引数がある場合
     if len(sys.argv) > 1:
         args = parser.parse_args()

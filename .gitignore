@@ -182,3 +182,6 @@ dmypy.json
 cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,python,jupyternotebooks
+
+# recording dataを追跡対象外にする
+out/recording
