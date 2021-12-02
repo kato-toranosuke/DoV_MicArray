@@ -213,6 +213,8 @@ if __name__ == '__main__':
     # 定数の設定
     # consts = Rec_Consts(
     #     index=0, output_path="../out/recording/mac", record_sec=1.5, rate=48000)
+    
+    # "OSError: [Errno -9981] Input overflowed"によって録音できなかった→chunkを大きくすることで対応
     consts = Rec_Consts(
         index=0, output_path="../out/recording/raspi", record_sec=2.0, rate=48000, chunk=2048)
     # 引数がある場合
