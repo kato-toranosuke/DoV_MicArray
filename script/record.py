@@ -14,7 +14,7 @@ RESPEAKER_WIDTH = 2
 # run getDeviceInfo.py to get index
 RESPEAKER_INDEX = 0  # refer to input device id
 CHUNK = 1024
-RECORD_SECONDS = 3
+RECORD_SECONDS = 2
 
 OUTPUT_PATH = "../out/recording/mac/"
 
