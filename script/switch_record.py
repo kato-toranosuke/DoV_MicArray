@@ -205,14 +205,14 @@ if __name__ == '__main__':
                         choices=['wall', 'nowall'], nargs='?')
     # choices コンテナーに含まれているかどうかのチェックは、type による型変換が実行された後であることに注意してください。
     # このため、choices に格納するオブジェクトの型は指定された type にマッチしている必要があります
-    parser.add_argument('--distance', choices=[1, 3, 5], type=int)
+    parser.add_argument('--distance', choices=[1, 2, 3, 4, 5], type=int)
     parser.add_argument('--polar_angle', choices=[0, 45, 90], type=int)
     parser.add_argument(
         '--dov_angle', choices=[0, 45, 90, 135, 180, 225, 270, 315], type=int)
 
     # 定数の設定
     consts = Rec_Consts(
-        index=0, output_path="../out/recording/mac", record_sec=1.5, rate=48000)
+        index=0, output_path="../out/recording/mac", record_sec=2.0, rate=48000)
     # consts = Rec_Consts(
     #     index=0, output_path="../out/recording/raspi", record_sec=1.5, rate=16000)
     # 引数がある場合
